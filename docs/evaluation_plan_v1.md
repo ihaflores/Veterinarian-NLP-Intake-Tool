@@ -278,7 +278,7 @@ For classification:
 | TF-IDF + Logistic Regression |        — |                — |             — |
 | Transformer                  |        — |                — |             — |
 
-## 12. Primary Success Criteria
+## 11. Primary Success Criteria
 Primary classification success criterion: The transformer-based triage classifier should outperform the TF-IDF + logistic regression baseline in macro-F1 while maintaining strong Emergency-class recall.
 
 ### For extraction:

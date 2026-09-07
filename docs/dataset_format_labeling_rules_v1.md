@@ -331,7 +331,7 @@ Do not put one in training and one in test.
 
 This data leakage would artificially inflate performance because they're almost the same example.
 
-## 5. Introduce a scenario ID
+## 15. Introduce a scenario ID
 
 Because of that leakage issue outline in previous section, we can add:
 

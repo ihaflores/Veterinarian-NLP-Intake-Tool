@@ -156,6 +156,10 @@ and
 
 > Needs Review
 
+### Handling Vaque Complaints
+
+If a note describes a vague symptom (e.g., "acting sick," "not right") without specifying critical signs like collapse, respiratory distress, or severe bleeding, label it based on the worst-case scenario reasonably supported by the text, while relying on the model's future Needs Review abstention threshold for clinical safety.
+
 ## Example Cases
 | Intake note                                                                    | Proposed class | Reasoning                                              |
 | ------------------------------------------------------------------------------ | -------------- | ------------------------------------------------------ |
@@ -174,3 +178,11 @@ and
 | “Owner wants annual vaccinations.”                                             | Routine        | Preventive care                                        |
 | “Stable arthritis follow-up; no new symptoms.”                                 | Routine        | Stable chronic follow-up                               |
 | "“My cat chewed part of a lily about 20 minutes ago and currently seems fine.” | Urgent         | Credible toxin exposure without symptoms               |
+
+## Example Edge Cases
+| Intake note                                                                            | Proposed class | Reasoning                                                                                                                                                        |
+| -------------------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| “My cat has been acting weird and hiding since Tuesday.”                               | Soon           | "Acting weird" is a vague behavioral change without significant systemic symptoms, which falls under Soon.                                                       |
+| "He had a severe seizure three years ago, but today he is just here for his vaccines." | Routine        | The acute complaint is preventive care (Routine); the severe keyword ("seizure") is purely historical and stable.                                                |
+| "Cat keeps crying in the litter box but is still eating her food and playing."         | Urgent         | The class precedence rule dictates using the highest supported urgency. Despite normal behavior, urinary difficulty without clear obstruction is at least Urgent |
+| "My dog ate something bad in the yard and is now sick."                                | Urgent         | Suspected toxin or foreign-body ingestion accompanied by illness warrants same-day evaluation, even if the specific symptom ("sick") is vague.                   |
