@@ -4,7 +4,7 @@
 
 Macro-F1
 
-You should also report for each class:
+For each class:
 
 <ul>
     <li>Precision</li>
@@ -91,22 +91,27 @@ is substantially worse.
 ## 4. Entity extraction evaluation
 
 For your four extracted entity types:
-
-SYMPTOM
-DURATION
-EXPOSURE
-MEDICATION
+<ul>
+    <li>SYMPTOM</li>
+    <li>DURATION</li>
+    <li>EXPOSURE</li>
+    <li>MEDICATION</li>
+</ul>
 
 use:
 
-Precision
-Recall
-F1
+<ul>
+    <li>Precision</li>
+    <li>Recall</li>
+    <li>F1</li>
+</ul>
 
 Ideally report:
 
-overall entity F1
-F1 by entity type
+<ul>
+    <li>overall entity F1</li>
+    <li>F1 by entity type</li>
+</ul>
 
 For example:
 | Entity     | Precision | Recall | F1 |

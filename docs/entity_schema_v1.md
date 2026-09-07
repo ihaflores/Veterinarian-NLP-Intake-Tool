@@ -180,7 +180,7 @@ Consider:
 
 > “He is not vomiting but has diarrhea.”
 
-You should not treat vomiting as a positive symptom. So we will snnotate it with negation metadata:
+You should not treat vomiting as a positive symptom. So we will annotate it with negation metadata:
 ```
 {
   "type": "SYMPTOM",
