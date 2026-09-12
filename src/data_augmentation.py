@@ -260,8 +260,8 @@ def generate_variants(base_case, num_variants=2):
     return variants
 
 if __name__ == "__main__":
-    input_file = "../data/seed/seed_cases_v1.jsonl"
-    output_file = "../data/train_cases_v1.jsonl"
+    input_file = "../data/seed/seed_cases_v2.jsonl"
+    output_file = "../data/train_cases_v2.jsonl"
 
     expanded_dataset = []
 
