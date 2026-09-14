@@ -2,7 +2,7 @@
 
 ## 1. Master Dataset Format Example
 
-```
+```jsonl
 {
   "id": "CAT_0001",
   "scenario_id": "SCENARIO_0001",
@@ -45,6 +45,7 @@
 ```
 
 ## 2. Required Fields
+
 | Field          | Purpose                             |
 | -------------- | ----------------------------------- |
 | `id`           | Unique note identifier              |
@@ -57,9 +58,10 @@
 | `source`       | Initially always `synthetic`        |
 
 ## 3. ID Convention
+
 Use simple IDs for each entry, for example:
 
-```
+```text
 CAT_0001
 CAT_0002
 DOG_0001
@@ -67,9 +69,10 @@ DOG_0002
 ```
 
 ## 4. Triage Label Rules
+
 ALWAYS use the four classes
 
-```
+```text
 EMERGENCY
 URGENT
 SOON
@@ -79,6 +82,7 @@ ROUTINE
 to ensure consistency. Each note received exactly one grouth-truth triage label
 
 ### Labeling Rule
+
 If multiple signs correspond to different urgency levels:
 
 > Assign the highest urgency level supported by the note.
@@ -89,11 +93,12 @@ Example:
 
 Label:
 
-```
+```jsonl
 "triage_label": "EMERGENCY"
 ```
 
 ## 5. Entity Annotation Rules
+
 Each entity should represent a span that appears in the original text.
 
 For example:
@@ -102,7 +107,7 @@ For example:
 
 would annotate to:
 
-```
+```jsonl
 {
   "type": "SYMPTOM",
   "text": "throwing up",
@@ -112,7 +117,7 @@ would annotate to:
 
 as opposed to only:
 
-```
+```jsonl
 {
   "type": "SYMPTOM",
   "text": "vomiting"
@@ -123,15 +128,14 @@ because "vomiting" didn't appear in the note.
 
 The idea is to keep both:
 
-<ul>
-    <li>original wording</li>
-    <li>normalized wording</li>
-</ul>
+- original wording
+- normalized wording
 
 ## 6. Character Offsets
+
 The extraction model will need to know where in text an entity occurs. So we will include:
 
-```
+```jsonl
 {
   "type": "SYMPTOM",
   "text": "vomiting",
@@ -142,21 +146,21 @@ The extraction model will need to know where in text an entity occurs. So we wil
 ```
 
 Where:
-<ul>
-    <li>start = first character position</li>
-    <li>end = character position immediately after the entity</li>
-</ul>
+
+- start = first character position
+- end = character position immediately after the entity
 
 This will make it much easier later to convert data into token-level NER labels.
 
 ## 7. Negation Rule
+
 For symptoms explicitly stated as absent:
 
 > “No vomiting, but she has diarrhea.”
 
 We would then store:
 
-```
+```jsonl
 {
   "type": "SYMPTOM",
   "text": "vomiting",
@@ -166,7 +170,7 @@ We would then store:
 
 and
 
-```
+```jsonl
 {
   "type": "SYMPTOM",
   "text": "diarrhea",
@@ -184,7 +188,7 @@ Do not treat negated symptoms as positive clinical evidence for triage unless th
 
 Use a simple field for certainty:
 
-```
+```text
 confirmed
 possible
 ```
@@ -193,7 +197,7 @@ Example:
 
 > “He ate chocolate.”
 
-```
+```jsonl
 "certainty": "confirmed"
 ```
 
@@ -201,7 +205,7 @@ versus:
 
 > “He may have gotten into chocolate.”
 
-```
+```jsonl
 "certainty": "possible"
 ```
 
@@ -215,7 +219,7 @@ Example:
 
 Could have:
 
-```
+```jsonl
 "entities": []
 ```
 
@@ -231,7 +235,7 @@ Example:
 
 Possible evidence:
 
-```
+```jsonl
 "evidence": [
   "straining in the litter box",
   "no urine is coming out"
@@ -242,20 +246,18 @@ This is different from the full entity list. The evidence field gives you a grou
 
 ## 11. Noise tags
 
-<ul>
-    <li>typo</li>
-    <li>abbreviation</li>
-    <li>paraphrase</li>
-    <li>missing_information</li>
-    <li>vague_timing</li>
-    <li>informal_language</li>
-    <li>negation</li>
-    <li>none</li>
-</ul>
+- typo
+- abbreviation
+- paraphrase
+- missing_information
+- vague_timing
+- informal_language
+- negation
+- none
 
 Example:
 
-```
+```jsonl
 "noise_tags": [
   "typo",
   "informal_language"
@@ -264,7 +266,7 @@ Example:
 
 For a clean note:
 
-```
+```jsonl
 "noise_tags": []
 ```
 
@@ -296,11 +298,9 @@ If the label is EMERGENCY, the model could learn the word emergency instead of t
 
 Similarly avoid:
 
-<ul>
-    <li>“needs urgent care”</li>
-    <li>“routine visit”</li>
-    <li>“can wait a few days”</li>
-</ul>
+- “needs urgent care”
+- “routine visit”
+- “can wait a few days”
 
 unless those phrases are intentionally part of a special test set.
 
@@ -309,11 +309,10 @@ The model should infer urgency from clinical content.
 ## 14. Train / validation / test split
 
 Dataset starting point:
-<ul>
-    <li>70% training</li>
-    <li>15% validation</li>
-    <li>15% test</li>
-</ul>
+
+- 70% training
+- 15% validation
+- 15% test
 
 The important rule:
 
@@ -335,13 +334,13 @@ This data leakage would artificially inflate performance because they're almost 
 
 Because of that leakage issue outline in previous section, we can add:
 
-```
+```jsonl
 "scenario_id": "SCENARIO_0042"
 ```
 
 Then several language variants can share the same scenario:
 
-```
+```text
 SCENARIO_0042
     CAT_0091
     CAT_0092
@@ -351,17 +350,16 @@ SCENARIO_0042
 When splitting the data, we can split by scenario_id, and not by individual note.
 
 ## Labeling Rules V1 Summary
-<ul>
-    <li>Label only information present in the note.</li>
-    <li>Do not infer a diagnosis.</li>
-    <li>Assign exactly one triage class.</li>
-    <li>If multiple urgency levels are present, use the highest supported urgency.</li>
-    <li>Preserve the original wording of extracted entities.</li>
-    <li>Store normalized concepts separately.</li>
-    <li>Annotate negated symptoms and mark them as negated.</li>
-    <li>Mark exposures as possible or confirmed where appropriate.</li>
-    <li>Do not invent entities that are absent.</li>
-    <li>Related paraphrases/noisy versions must share a scenario_id.</li>
-    <li>All versions of one scenario must remain in the same train/validation/test split.</li>
-    <li>Avoid explicit urgency words that leak the ground-truth label.</li>
-</ul>
+
+- Label only information present in the note.
+- Do not infer a diagnosis.
+- Assign exactly one triage class.
+- If multiple urgency levels are present, use the highest supported urgency.
+- Preserve the original wording of extracted entities.
+- Store normalized concepts separately.
+- Annotate negated symptoms and mark them as negated.
+- Mark exposures as possible or confirmed where appropriate.
+- Do not invent entities that are absent.
+- Related paraphrases/noisy versions must share a scenario_id.
+- All versions of one scenario must remain in the same train/validation/test split.
+- Avoid explicit urgency words that leak the ground-truth label.

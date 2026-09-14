@@ -1,6 +1,7 @@
 # Entity Schema V1
 
 ## Entity Schema Summary
+
 | Entity       | Meaning                           | Example         |
 | ------------ | --------------------------------- | --------------- |
 | `SYMPTOM`    | Clinical sign/complaint           | vomiting        |
@@ -9,6 +10,7 @@
 | `MEDICATION` | Medication/treatment mention      | prednisone      |
 
 ### Optional Metadata
+
 | Field        | Purpose                              |
 | ------------ | ------------------------------------ |
 | `normalized` | Standardized wording                 |
@@ -20,24 +22,25 @@
 ## 1. SYMPTOM
 
 ### Definition
+
 Any phrase describing an observed clinical sign, complaint, behavioral change, or physical abnormality reported in the intake note.
 
 ### Examples
-<ul>
-    <li>vomiting</li>
-    <li>diarrhea</li>
-    <li>lethargic</li>
-    <li>not eating</li>
-    <li>coughing</li>
-    <li>limping</li>
-    <li>difficulty breathing</li>
-    <li>straining to urinate</li>
-    <li>blood in urine</li>
-    <li>shaking</li>
-    <li>collapsed</li>
-</ul>
+
+- vomiting
+- diarrhea
+- lethargic
+- not eating
+- coughing
+- limping
+- difficulty breathing
+- straining to urinate
+- blood in urine
+- shaking
+- collapsed
 
 ### Annotation Rule
+
 Annotate the smallest meaningful phrase that captures the symptom.
 Example:
 
@@ -50,7 +53,9 @@ Annotate:
 rather than the entire sentence.
 
 ### Normalization
+
 Where useful, map informal wording to a standardized concept.
+
 | Raw phrase        | Normalized value     |
 | ----------------- | -------------------- |
 | throwing up       | vomiting             |
@@ -60,31 +65,32 @@ Where useful, map informal wording to a standardized concept.
 | peeing blood      | hematuria            |
 | trouble breathing | respiratory distress |
 
-
 ## 2. DURATION
 
 ### Definition
+
 Any phrase describing when a symptom or event began, how long it has lasted, or when it occurred.
 
 ### Examples
-<ul>
-    <li>since yesterday</li>
-    <li>for three days</li>
-    <li>this morning</li>
-    <li>started an hour ago</li>
-    <li>about a week</li>
-    <li>for months</li>
-    <li>20 minutes ago</li>
-</ul>
+
+- since yesterday
+- for three days
+- this morning
+- started an hour ago
+- about a week
+- for months
+- 20 minutes ago
 
 ### Annotation Rule
+
 Preserve the original wording.
 Example:
 
 > “She has been coughing for about three days.”
 
 Extract:
-```
+
+```jsonl
 {
   "type": "DURATION",
   "text": "for about three days"
@@ -92,7 +98,8 @@ Extract:
 ```
 
 ### Optional Normalization
-```
+
+```jsonl
 {
   "text": "for three days",
   "normalized_value": 3,
@@ -103,50 +110,53 @@ Extract:
 ## 3. EXPOSURE
 
 ### Definition
+
 A phrase describing possible or confirmed contact with a toxin, foreign object, harmful substance, trauma source, or other potentially relevant external event. A reported contact, ingestion, or external event that could contribute to the animal's current condition.
 
 ### Examples
-<ul>
-    <li>ate chocolate</li>
-    <li>chewed on a lily</li>
-    <li>got into rat poison</li>
-    <li>swallowed string</li>
-    <li>drank antifreeze</li>
-    <li>may have eaten medication</li>
-    <li>got into the trash</li>
-    <li>hit by a car</li>
-</ul>
+
+- ate chocolate
+- chewed on a lily
+- got into rat poison
+- swallowed string
+- drank antifreeze
+- may have eaten medication
+- got into the trash
+- hit by a car
 
 ## 4. MEDICATION
 
 ### Definition
+
 Any medication, drug, supplement, or treatment explicitly mentioned in the intake note.
 
 ### Examples
-<ul>
-    <li>Benadryl</li>
-    <li>insulin</li>
-    <li>prednisone</li>
-    <li>antibiotics</li>
-    <li>flea medication</li>
-    <li>pain medication</li>
-    <li>gabapentin</li>
-</ul>
+
+- Benadryl
+- insulin
+- prednisone
+- antibiotics
+- flea medication
+- pain medication
+- gabapentin
 
 ### Annotation Rule
+
 Extract the medication mention itself.
 Example:
 
 > “I gave her Benadryl about two hours ago.”
 
 Might annotate to:
-```
+
+```jsonl
 {
   "type": "MEDICATION",
   "text": "Benadryl",
   "normalized": "diphenhydramine"
 }
 ```
+
 The timing:
 
 > two hours ago
@@ -156,13 +166,15 @@ would separately be labeled DURATION.
 ## Important Functionalities
 
 ### Allow multiple entities
+
 A single note can contain several symptoms.
 Example:
 
 > “My cat has been vomiting and having diarrhea since yesterday and seems lethargic.”
 
 That should produce:
-```
+
+```jsonl
 {
   "symptoms": [
     "vomiting",
@@ -176,12 +188,14 @@ That should produce:
 ```
 
 ### Negation
+
 Consider:
 
 > “He is not vomiting but has diarrhea.”
 
 You should not treat vomiting as a positive symptom. So we will annotate it with negation metadata:
-```
+
+```jsonl
 {
   "type": "SYMPTOM",
   "text": "vomiting",
@@ -194,7 +208,8 @@ Example:
 > “No vomiting, but she has diarrhea.”
 
 could become:
-```
+
+```jsonl
 [
   {
     "type": "SYMPTOM",
@@ -212,6 +227,7 @@ could become:
 ```
 
 ### Uncertainty
+
 Same idea for phrases like:
 
 > “I think he may have eaten chocolate.”
@@ -221,12 +237,14 @@ That's not the same as:
 > “I watched him eat chocolate.”
 
 Can add an optional field:
-```
+
+```jsonl
 "certainty": "possible"
 ```
 
 ## Potential JSON Structure for V1
-```
+
+```jsonl
 {
   "id": "CAT_0001",
   "species": "cat",

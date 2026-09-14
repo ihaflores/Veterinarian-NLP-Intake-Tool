@@ -6,31 +6,23 @@ Macro-F1
 
 For each class:
 
-<ul>
-    <li>Precision</li>
-    <li>Recall</li>
-    <li>F1-score</li>
-</ul>
+- Precision
+- Recall
+- F1-score
 
 And include a:
 
-<ul>
-    <li>Confusion matrix</li>
-
-</ul>
+- Confusion matrix
 
 For example:
 
-<ul>
-    <li>Emergency → Urgent</li>
-    <li>Urgent → Soon</li>
-    <li>Soon → Routine</li>
-</ul>
+- Emergency → Urgent
+- Urgent → Soon
+- Soon → Routine
 
 Those errors are not equally serious.
 
 ## 2. Safety-focused evaluation
-
 
 ### Emergency Recall
 
@@ -40,8 +32,8 @@ This answers:
 
 > Of all real Emergency cases in the test set, how many did the model successfully identify?
 
-
 ### Emergency False-Negative Rate
+
 $$ Emergency\ FNR = 1 - Emergency\ Recall $$
 
 This directly measures under-triage of Emergency cases.
@@ -50,21 +42,17 @@ For example:
 
 If there are 100 true Emergency cases and the model misses 8:
 
-<ul>
-    <li>Emergency recall = 92%</li>
-    <li>Emergency FNR = 8%</li>
-</ul>
+- Emergency recall = 92%
+- Emergency FNR = 8%
 
 ## 3. Under-triage severity
 
 Assign each class an ordinal urgency level:
 
-<ul>
-    <li>ROUTINE = 0</li>
-    <li>SOON = 1</li>
-    <li>URGENT = 2</li>
-    <li>EMERGENCY = 3</li>
-</ul>
+- ROUTINE = 0
+- SOON = 1
+- URGENT = 2
+- EMERGENCY = 3
 
 Then measure how far a prediction falls below the correct urgency.
 
@@ -91,29 +79,25 @@ is substantially worse.
 ## 4. Entity extraction evaluation
 
 For your four extracted entity types:
-<ul>
-    <li>SYMPTOM</li>
-    <li>DURATION</li>
-    <li>EXPOSURE</li>
-    <li>MEDICATION</li>
-</ul>
+
+- SYMPTOM
+- DURATION
+- EXPOSURE
+- MEDICATION
 
 use:
 
-<ul>
-    <li>Precision</li>
-    <li>Recall</li>
-    <li>F1</li>
-</ul>
+- Precision
+- Recall
+- F1
 
 Ideally report:
 
-<ul>
-    <li>overall entity F1</li>
-    <li>F1 by entity type</li>
-</ul>
+- overall entity F1
+- F1 by entity type
 
 For example:
+
 | Entity     | Precision | Recall | F1 |
 | ---------- | --------: | -----: | -: |
 | Symptom    |         — |      — |  — |
@@ -147,10 +131,8 @@ We're storing things such as:
 
 so we have two possible tasks:
 
-<ol>
-    <li>Find the correct text span</li>
-    <li>Assign the correct normalized concept</li>
-</ol>
+- Find the correct text span
+- Assign the correct normalized concept
 
 Normalization can initially use deterministic lookup rules and be evaluated separately with:
 
@@ -162,7 +144,7 @@ That prevents the NER task from becoming unnecessarily complicated.
 
 The classifier will output probabilities such as:
 
-```
+```text
 Emergency: 0.72
 Urgent:    0.19
 Soon:      0.07
@@ -189,7 +171,7 @@ when confidence is below a chosen threshold.
 
 Example:
 
-```
+```texy
 maximum confidence < 0.60 → Needs Review
 ```
 
@@ -250,6 +232,7 @@ Important details intentionally omitted.
 For each subset, compare macro-F1 against the clean set.
 
 Example eventual result:
+
 | Condition           | Macro-F1 |
 | ------------------- | -------: |
 | Clean               |      .XX |
@@ -273,23 +256,26 @@ against:
 DeBERTa (Or other models chosen to use)
 
 For classification:
+
 | Model                        | Macro-F1 | Emergency Recall | Emergency FNR |
 | ---------------------------- | -------: | ---------------: | ------------: |
 | TF-IDF + Logistic Regression |        — |                — |             — |
 | Transformer                  |        — |                — |             — |
 
 ## 11. Primary Success Criteria
+
 Primary classification success criterion: The transformer-based triage classifier should outperform the TF-IDF + logistic regression baseline in macro-F1 while maintaining strong Emergency-class recall.
 
-### For extraction:
+### For extraction
 
 > Primary extraction success criterion: The transformer-based extraction system should improve entity-level F1 compared with the rule/dictionary baseline, particularly on paraphrased and noisy notes.
 
-### For safety:
+### For safety
 
 > Safety success criterion: Calibration and abstention should reduce high-confidence under-triage errors compared with the uncalibrated classifier.
 
 ## Evaluation Table V1
+
 | Component             | Primary measure         | Supporting measures                  |
 | --------------------- | ----------------------- | ------------------------------------ |
 | Triage classification | Macro-F1                | Per-class precision, recall, F1      |

@@ -1,37 +1,39 @@
 # Triage Rurbic V1
 
 ## Class Summary Chart
-| Class       | Meaning                                 | Target Response Time                                      | Typical Examples                                |
-| ----------- | ----------------------------------------| --------------------------------------------------------- | ----------------------------------------------- |
-| Emergency   | Immediate threat to life/organ function | Immediate                                                 | respiratory distress, collapse, active seizures |
-| Urgent      | Serious but currently stable | Same day | toxin exposure while stable, repeated vomiting + lethargy | could worsen if delayed                         |
-| Soon        | Stable, noncritical medical issue       | 1-3 days | mild GI upset, mild lameness, ear/skin issues  | care needed but short delay acceptable          |
-| Routine     | Non-urgent                              | Next available | vaccine, wellness, stable follow-up      | no meaningful acute deterioration               |
+
+| Class       | Meaning                                 | Target Response Time                                      | Typical Examples                                          |
+| ----------- | ----------------------------------------| --------------------------------------------------------- | --------------------------------------------------------- |
+| Emergency   | Immediate threat to life/organ function | Immediate                                                 | respiratory distress, collapse, active seizures           |
+| Urgent      | Serious but currently stable            | Same day                                                  | toxin exposure while stable, repeated vomiting + lethargy |
+| Soon        | Stable, noncritical medical issue       | 1-3 days                                                  | mild GI upset, mild lameness, ear/skin issues             |
+| Routine     | Non-urgent                              | Next available                                            | vaccine, wellness, stable follow-up                       |
 
 ## Emergency
 
 ### Definition
+
 A case should be labeled Emergency when the intake text suggests an immediate or potentially imminent threat to life, breathing, circulation, neurologic function, or critical organ function that warrants immediate veterinary assessment.
 
 ### Intended Response
+
 Immediate evaluation.
 
 ### Typical Indicators
-<ul>
-    <li>severe difficulty breathing</li>
-    <li>open-mouth breathing in a cat</li>
-    <li>blue/pale gums when paired with severe clinical signs</li>
-    <li>collapse or unresponsiveness</li>
-    <li>inability to stand associated with acute severe illness</li>
-    <li>active seizure or repeated seizures</li>
-    <li>uncontrolled bleeding</li>
-    <li>major trauma</li>
-    <li>suspected urinary obstruction, ie a cat repeatedly straining without producing urine</li>
-    <li>severe toxin exposure accompanied by significant symptoms</li>
-    <li>rapidly worsening neurologic signs</li>
-    <li>severe abdominal distention with signs of distress</li>
-    <li>profound weakness accompanied by other critical signs</li>
-</ul>
+
+- severe difficulty breathing
+- open-mouth breathing in a cat
+- blue/pale gums when paired with severe clinical signs
+- collapse or unresponsiveness
+- inability to stand associated with acute severe illness
+- active seizure or repeated seizures
+- uncontrolled bleeding
+- major trauma
+- suspected urinary obstruction, ie a cat repeatedly straining without producing urine
+- severe toxin exposure accompanied by significant symptoms
+- rapidly worsening neurologic signs
+- severe abdominal distention with signs of distress
+- profound weakness accompanied by other critical signs
 
 ### Important Rule
 A single symptom should not automatically make a case Emergency unless that symptom itself represents a critical condition.
@@ -45,31 +47,32 @@ would not be Emergency. But:
 
 would be Emergency because of the combination and severity.
 
-
 ## Urgent
 
 ### Definition
+
 A case should be labeled Urgent when the patient appears stable enough that immediate resuscitation is not indicated from the note, but the signs suggest a potentially serious condition requiring veterinary assessment the same day.
 
 ### Intended Response
+
 Same-day evaluation.
 
 ### Typical Indicators
-<ul>
-    <li>repeated vomiting or diarrhea with lethargy</li>
-    <li>significant decrease in appetite accompanied by other illness signs</li>
-    <li>suspected toxin ingestion while currently stable</li>
-    <li>painful injury or suspected fracture while the animal remains stable</li>
-    <li>worsening respiratory symptoms without obvious severe respiratory distress</li>
-    <li>fever or suspected infection with systemic illness</li>
-    <li>blood in vomit, urine, or stool without signs of immediate instability</li>
-    <li>significant pain</li>
-    <li>acute neurologic abnormalities without collapse or active seizure</li>
-    <li>repeated unsuccessful urination attempts when obstruction is not clearly established</li>
-    <li>foreign-body ingestion without current collapse or severe distress</li>
-</ul>
+
+- repeated vomiting or diarrhea with lethargy
+- significant decrease in appetite accompanied by other illness signs
+- suspected toxin ingestion while currently stable
+- painful injury or suspected fracture while the animal remains stable
+- worsening respiratory symptoms without obvious severe respiratory distress
+- fever or suspected infection with systemic illness
+- blood in vomit, urine, or stool without signs of immediate instability
+- significant pain
+- acute neurologic abnormalities without collapse or active seizure
+- repeated unsuccessful urination attempts when obstruction is not clearly established
+- foreign-body ingestion without current collapse or severe distress
 
 ### Important Rule
+
 Urgent cases are potentially serious, but the text does not indicate immediate life-threatening instability.
 A useful distinction is:
 
@@ -79,62 +82,64 @@ versus
 
 > Urgent: “This animal needs to be evaluated today because waiting could significantly worsen the outcome.”
 
-
 ## Soon
 
 ### Definition
+
 A case should be labeled Soon when there is a medical problem that warrants veterinary evaluation but the patient appears stable and a short delay is unlikely to create immediate danger.
 
 ### Intended Response
+
 Approximately within 1–3 days.
 
 ### Typical Indicators
-<ul>
-    <li>mild vomiting or diarrhea without systemic illness</li>
-    <li>mild decrease in appetite while otherwise behaving normally</li>
-    <li>mild lameness while still walking and bearing weight</li>
-    <li>ear irritation</li>
-    <li>skin irritation, itching, or minor lesions</li>
-    <li>mild coughing without breathing difficulty</li>
-    <li>chronic condition with a mild change</li>
-    <li>minor eye irritation without severe pain or trauma</li>
-    <li>minor wound without active bleeding</li>
-    <li>behavioral change without significant systemic symptoms</li>
-    <li>mild urinary frequency without evidence of obstruction</li>
-</ul>
+
+- mild vomiting or diarrhea without systemic illness
+- mild decrease in appetite while otherwise behaving normally
+- mild lameness while still walking and bearing weight
+- ear irritation
+- skin irritation, itching, or minor lesions
+- mild coughing without breathing difficulty
+- chronic condition with a mild change
+- minor eye irritation without severe pain or trauma
+- minor wound without active bleeding
+- behavioral change without significant systemic symptoms
+- mild urinary frequency without evidence of obstruction
 
 ### Important Rule
 Soon generally means:
 
 > “This should be examined, but there is no indication in the note that waiting briefly creates substantial immediate risk.”
 
-
 ## Routine
 
 ### Definition
+
 A case should be labeled Routine when the note describes preventive care, stable follow-up, administrative/non-acute concerns, or a longstanding issue without evidence of meaningful acute deterioration.
 
 ### Intended Response
+
 Next routinely available appointment.
 
 ### Typical Indicators
-<ul>
-    <li>wellness examination</li>
-    <li>vaccinations</li>
-    <li>nail trim</li>
-    <li>routine medication follow-up</li>
-    <li>stable chronic condition</li>
-    <li>longstanding minor issue with no recent change</li>
-    <li>preventive-care questions</li>
-    <li>diet or weight-management discussion without acute symptoms</li>
-    <li>routine recheck after successful treatment</li>
-    <li>nonurgent owner questions</li>
-</ul>
+
+- wellness examination
+- vaccinations
+- nail trim
+- routine medication follow-up
+- stable chronic condition
+- longstanding minor issue with no recent change
+- preventive-care questions
+- diet or weight-management discussion without acute symptoms
+- routine recheck after successful treatment
+- nonurgent owner questions
 
 ### Important Rule
+
 Routine does not mean “nothing is wrong.” It means there is no evidence in the note that expedited evaluation is necessary.
 
 ## Class Precedence Rule
+
 When multiple findings suggest different urgency levels, assign the highest urgency level supported by the note. Example:
 
 > “Cat has mild diarrhea but is now having difficulty breathing.”
@@ -144,6 +149,7 @@ Diarrhea might suggest Soon, but breathing difficulty could justify Emergency. T
 > Emergency wins.
 
 ## Handling Missing/Ambiguous Information
+
 Distinguish between:
 
 ### Ground-truth triage labels
@@ -161,6 +167,7 @@ and
 If a note describes a vague symptom (e.g., "acting sick," "not right") without specifying critical signs like collapse, respiratory distress, or severe bleeding, label it based on the worst-case scenario reasonably supported by the text, while relying on the model's future Needs Review abstention threshold for clinical safety.
 
 ## Example Cases
+
 | Intake note                                                                    | Proposed class | Reasoning                                              |
 | ------------------------------------------------------------------------------ | -------------- | ------------------------------------------------------ |
 | “Cat vomited once this morning but is eating and playing normally.”            | Soon           | Mild acute symptom, stable                             |
@@ -180,6 +187,7 @@ If a note describes a vague symptom (e.g., "acting sick," "not right") without s
 | "“My cat chewed part of a lily about 20 minutes ago and currently seems fine.” | Urgent         | Credible toxin exposure without symptoms               |
 
 ## Example Edge Cases
+
 | Intake note                                                                            | Proposed class | Reasoning                                                                                                                                                        |
 | -------------------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | “My cat has been acting weird and hiding since Tuesday.”                               | Soon           | "Acting weird" is a vague behavioral change without significant systemic symptoms, which falls under Soon.                                                       |
