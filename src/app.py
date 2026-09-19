@@ -1,46 +1,53 @@
 import streamlit as st
 import time
+import joblib
+from rules_based_extractor import extract_entities
 
-# --- STUB/MOCK INFERENCE FUNCTION ---
-# In Phase 3, will replace this with TF-IDF Baseline model.
-# In Phase 6, will replace this with DeBERTa Transformer.
-def mock_inference(text):
-    time.sleep(1) # Simulate model processing time
+# Load the trained TF-IDF pipeline once at startup
+try:
+    pipeline = joblib.load('tfidf_baseline.joblib')
+except FileNotFoundError:
+    st.error("Model file not found. Please run train_tfidf_baseline.py first.")
 
-    # Simple rule-based mock just for the UI skeleton
-    text_lower = text.lower()
-    if "lily" in text_lower or "collapse" in text_lower:
-        label = "EMERGENCY"
-        conf = 0.88
-    elif "chocolate" in text_lower or "vomit" in text_lower:
-        label = "URGENT"
-        conf = 0.75
-    elif "vaccine" in text_lower or "trim" in text_lower:
-        label = "ROUTINE"
-        conf = 0.95
-    else:
-        label = "SOON"
-        conf = 0.60 # Simulating lower confidence
+def baseline_inference(text):
+    # 1. TF-IDF Triage Classification
+    triage_class = pipeline.predict([text])[0]
 
-    # Mock output matching your Phase 6 deliverables
+    # Extract confidence using prediction probabilities
+    probs = pipeline.predict_proba([text])[0]
+    confidence = max(probs)
+
+    # 2. Rule-Based Entity Extraction
+    extracted_entities = extract_entities(text)
+
+    # 3. Format outputs for the Streamlit UI
+    formatted_entities = {
+        "Symptoms": [], "Exposures": [], "Duration": [], "Medications": []
+    }
+    evidence_list = []
+
+    for ent in extracted_entities:
+        # Map the uppercase schema keys to the UI dictionary
+        key = ent['type'].capitalize()
+        if key == "Symptom" or key == "Exposure" or key == "Medication":
+            key += "s"
+
+        formatted_entities[key].append(ent['text'])
+        evidence_list.append(ent['text'])
+
     return {
-        "triage_class": label,
-        "confidence": conf,
-        "abstain": conf < 0.65, # Simulating the Phase 5 abstention policy
-        "entities": {
-            "Symptoms": ["vomiting"] if "vomit" in text_lower else [],
-            "Exposures": ["lily"] if "lily" in text_lower else [],
-            "Duration": ["this morning"] if "morning" in text_lower else [],
-            "Medications": []
-        },
-        "summary": "Patient presenting with owner-reported concerns.",
-        "evidence": ["vomiting", "lily"] # Words to highlight
+        "triage_class": triage_class,
+        "confidence": confidence,
+        "abstain": confidence < 0.65,
+        "entities": formatted_entities,
+        "summary": "Baseline extraction and classification complete.",
+        "evidence": evidence_list
     }
 
-# STREAMLIT UI 
+# STREAMLIT UI
 st.set_page_config(page_title="Veterinary NLP Triage", layout="wide")
 
-st.title("🐾 Vet Triage NLP Decision Support")
+st.title("Vet Triage NLP Decision Support")
 st.markdown("*Note: This is a decision-support tool. It does not provide medical diagnoses.*")
 
 # Text Input
@@ -52,7 +59,7 @@ if st.button("Analyze Note"):
         st.warning("Please enter an intake note.")
     else:
         with st.spinner("Analyzing text..."):
-            results = mock_inference(intake_note)
+            results = baseline_inference(intake_note)
 
         st.divider()
 
@@ -61,15 +68,15 @@ if st.button("Analyze Note"):
 
         with col1:
             if results["abstain"]:
-                st.error("⚠️ STATUS: NEEDS HUMAN REVIEW")
+                st.error("STATUS: NEEDS HUMAN REVIEW")
             else:
-                st.success(f"🏥 TRIAGE CLASS: {results['triage_class']}")
+                st.success(f"TRIAGE CLASS: {results['triage_class']}")
 
         with col2:
             st.metric(label="Confidence Score", value=f"{results['confidence']:.0%}")
 
         with col3:
-            st.info(f"📝 Summary: {results['summary']}")
+            st.info(f"Summary: {results['summary']}")
 
         st.divider()
 
