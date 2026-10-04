@@ -52,4 +52,4 @@ def create_dataset_splits(input_file, train_ratio=0.7, val_ratio=0.15):
             print(f"  - {label}: {count}")
 
 # Run the splitter
-create_dataset_splits("train_cases_v2.jsonl")
+create_dataset_splits("../../data/training/train_cases_v3.jsonl")

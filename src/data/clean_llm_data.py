@@ -59,4 +59,4 @@ def clean_llm_data(input_file, output_file):
         for c in cleaned_cases:
             f.write(json.dumps(c) + "\n")
 
-clean_llm_data("gen_data_v1.jsonl", "seed_cases_v2.jsonl")
+clean_llm_data("gen_data_v2.1.jsonl", "seed_cases_v3.jsonl")

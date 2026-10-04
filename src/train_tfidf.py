@@ -20,8 +20,8 @@ def load_data(filepath):
 def main():
     # Load the dataset splits generated in Phase 2
     print("Loading data...")
-    X_train, y_train = load_data('../data/train_data.jsonl')
-    X_val, y_val = load_data('../data/val_data.jsonl')
+    X_train, y_train = load_data('../data/split/v2/train_data.jsonl')
+    X_val, y_val = load_data('../data/split/v2/val_data.jsonl')
 
     # Build the scikit-learn pipeline
     # Using TfidfVectorizer and LogisticRegression to establish the reference point
@@ -64,7 +64,7 @@ def main():
     print(cm_df)
 
     # Store the pipeline as a file to be used by web app
-    joblib.dump(pipeline, 'tfidf_baseline.joblib')
+    joblib.dump(pipeline, 'models/tfidf_baseline.joblib')
 
 if __name__ == "__main__":
     main()

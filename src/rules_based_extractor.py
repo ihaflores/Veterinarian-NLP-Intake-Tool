@@ -1,7 +1,7 @@
 import json
 import re
 
-# 1. Define the regex patterns for the 4-part entity schema
+# Define the regex patterns for the 4-part entity schema
 # These prioritize common cats-first and general veterinary terms
 ENTITY_PATTERNS = {
     "SYMPTOM": [
@@ -22,7 +22,7 @@ ENTITY_PATTERNS = {
 }
 
 def extract_entities(text):
-    """Scans textand returns extracted entities with exact character offsets."""
+    """Scans text and returns extracted entities with exact character offsets."""
     extracted = []
     for entity_type, patterns in ENTITY_PATTERNS.items():
         for pattern in patterns:

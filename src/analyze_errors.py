@@ -15,8 +15,8 @@ def load_data(filepath):
 
 def main():
     # Load the data
-    X_train, y_train = load_data('../data/train_data.jsonl')
-    X_val, y_val = load_data('../data/val_data.jsonl')
+    X_train, y_train = load_data('../data/split/v2/train_data.jsonl')
+    X_val, y_val = load_data('../data/split/v2/val_data.jsonl')
 
     # Rebuild and fit the exact baseline pipeline
     pipeline = Pipeline([

@@ -19,7 +19,22 @@ VET_ABBREVIATIONS = {
     "male neutered": "mn",
     "female spayed": "fs",
     "heart rate": "hr",
-    "respiratory rate": "rr"
+    "respiratory rate": "rr",
+    "urinary tract infection": "uti",
+    "upper respiratory infection": "uri",
+    "intravenous": "iv",
+    "subcutaneous": "sq",
+    "foreign body": "fb",
+    "hit by car": "hbc",
+    "bowel movement": "bm",
+    "quality of life": "qol",
+    "chronic kidney disease": "ckd",
+    "feline leukemia": "felv",
+    "feline immunodeficiency virus": "fiv",
+    "twice a day": "bid",
+    "once a day": "sid",
+    "three times a day": "tid",
+    "as needed": "prn"
 }
 
 INFORMAL_DICT = {
@@ -27,7 +42,16 @@ INFORMAL_DICT = {
     "decreased appetite": ["barely eating", "picking at her food"],
     "vomiting": ["puking", "throwing up"],
     "diarrhea": ["the runs"],
-    "respiratory distress": ["breathing really hard", "panting heavy"]
+    "respiratory distress": ["breathing really hard", "panting heavy"],
+    "urination": ["peeing", "going to the bathroom"],
+    "defecation": ["pooping", "going number two"],
+    "straining to urinate": ["can't pee", "trying to pee but nothing comes out"],
+    "pruritus": ["itching constantly", "scratching a lot", "chewing on himself"],
+    "seizure": ["fit", "convulsion", "shaking uncontrollably"],
+    "vocalization": ["crying", "yowling", "screaming constantly"],
+    "limping": ["walking funny", "hobbling", "not putting weight on it"],
+    "aggression": ["snapping", "acting mean", "trying to bite us"],
+    "pain": ["hurting", "sore", "tender"]
 }
 
 VAGUE_TIMING_DICT = {
@@ -38,7 +62,14 @@ VAGUE_TIMING_DICT = {
     "about an hour ago": ["a bit ago", "earlier"],
     "about 30 minutes ago": ["a little while ago", "just recently"],
     "for two days": ["for a couple days", "for a while"],
-    "last week": ["a while ago", "recently"]
+    "last week": ["a while ago", "recently"],
+    "for a week": ["for a while", "since last week sometime"],
+    "for the past month": ["for weeks", "lately"],
+    "a few hours ago": ["earlier today", "a while ago"],
+    "since Tuesday": ["for a few days", "since earlier this week"],
+    "over the weekend": ["recently", "a couple days ago"],
+    "this past weekend": ["lately", "recently"],
+    "for four days": ["for several days", "for a bit"]
 }
 
 def apply_abbreviation(text, entities):
@@ -176,29 +207,47 @@ def apply_vague_timing(text, entities):
 
     return new_text, new_entities, "vague_timing"
 
-def generate_variants(base_case, num_variants=2):
+def apply_prefix_noise(text, entities):
     """
-    Creates noisy variants from a clean base case
+    Looks for standard prefixes (e.g., 'Phone call:', 'Web form:') at the start
+    of the text and either introduces a typo or removes it entirely, shifting offsets.
     """
-    variants = [base_case] # keep the clean base case
+    # Regex to match prefixes at the very beginning of the string (ignoring case)
+    # This matches things like "Phone call:", "Web form:", "Tech note:"
+    pattern = r'^(phone call:|web form:|tech note:)\s*'
+    match = re.match(pattern, text, re.IGNORECASE)
 
-    for i in range(num_variants):
-        variant = copy.deepcopy(base_case)
+    if not match:
+        return text, entities, None
 
-        # Modify ID so it's unique, but keep scenario_id the same
-        variant["id"] = f"{base_case['id']}_var{i+1}"
+    match_start = match.start()
+    match_end = match.end()
+    original_prefix = match.group(1)
 
-        # Randomly choose a noise function (simplified)
-        new_text, new_entities, applied_tag = apply_abbreviation(
-            variant["text"],
-            variant["entities"]
-        )
+    # 50% chance to remove the prefix entirely, 50% chance to misspell/alter it
+    action = random.choice(["remove", "alter"])
 
-        variant["text"] = new_text
-        variant["entities"] = new_entities
-        variant["noise_tags"].append(applied_tag)
+    if action == "remove":
+        new_string = ""  # The original text simply starts with the clinical note now
+    else:
+        # Alterations that mimic real-world fast typing at a reception desk
+        if "phone" in original_prefix.lower():
+            alternatives = ["Phne call: ", "Phone: ", "Call- "]
+        elif "web" in original_prefix.lower():
+            alternatives = ["Webform: ", "Web submission- ", "Online: "]
+        else:
+            alternatives = ["Tech: ", "Note: ", "Tech Note- "]
 
-        return variants
+        new_string = random.choice(alternatives)
+
+    # Safely swap the prefix and shift all downstream entity offsets
+    new_text, new_entities = replace_text_and_shift_offsets(
+        text=text, entities=entities,
+        match_start=match_start, match_end=match_end,
+        new_string=new_string
+    )
+
+    return new_text, new_entities, "prefix_noise"
 
 def replace_text_and_shift_offsets(text, entities, match_start, match_end, new_string):
     """
@@ -239,7 +288,7 @@ def replace_text_and_shift_offsets(text, entities, match_start, match_end, new_s
 def generate_variants(base_case, num_variants=2):
     """Creates noisy variants from a clean base case."""
     variants = [base_case]
-    noise_functions = [apply_abbreviation, apply_typo, apply_informal_language, apply_vague_timing]
+    noise_functions = [apply_abbreviation, apply_typo, apply_informal_language, apply_vague_timing, apply_prefix_noise]
 
     for i in range(num_variants):
         variant = copy.deepcopy(base_case)
@@ -260,8 +309,8 @@ def generate_variants(base_case, num_variants=2):
     return variants
 
 if __name__ == "__main__":
-    input_file = "../data/seed/seed_cases_v2.jsonl"
-    output_file = "../data/train_cases_v2.jsonl"
+    input_file = "../../data/seed/seed_cases_v3.jsonl"
+    output_file = "../../data/training/train_cases_v3.jsonl"
 
     expanded_dataset = []
 
@@ -270,7 +319,7 @@ if __name__ == "__main__":
         for line in f:
             base_case = json.loads(line)
             # Generate 2 noisy variants per base case
-            expanded_dataset.extend(generate_variants(base_case, num_variants=2))
+            expanded_dataset.extend(generate_variants(base_case, num_variants=3))
 
     # Save the new dataset
     with open(output_file, "w") as f:
