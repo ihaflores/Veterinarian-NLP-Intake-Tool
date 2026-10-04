@@ -4,7 +4,8 @@ from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
     TrainingArguments,
-    Trainer
+    Trainer,
+    DataCollatorWithPadding
 )
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 import torch
@@ -13,7 +14,8 @@ if torch.cuda.is_available():
     print(f"GPU Device: {torch.cuda.get_device_name(0)}")
 
 # Define the primary model specified in the Phase 4 checkpoint
-MODEL_NAME = "microsoft/deberta-v3-base"
+# MODEL_NAME = "microsoft/deberta-v3-base"
+MODEL_NAME = "distilbert-base-uncased"
 
 # Map the four triage classes to integer IDs for PyTorch
 LABEL_MAP = {
@@ -48,8 +50,8 @@ def main():
     })
 
     def encode_labels(example):
-        # FIX 1: Rename 'label' to 'labels' (plural) for the HF Trainer
-        example['labels'] = LABEL_MAP[example['triage_label']]
+        # Rename 'label' to 'labels' and cast to a list for tensor stacking
+        example['labels'] = [LABEL_MAP[example['triage_label']]]
         return example
 
     dataset = dataset.map(encode_labels)
@@ -60,7 +62,6 @@ def main():
     def tokenize_function(examples):
         return tokenizer(
             examples["text"],
-            padding="max_length",
             truncation=True,
             max_length=256
         )
@@ -77,7 +78,8 @@ def main():
     # Initialize the model with a 4-class classification head
     model = AutoModelForSequenceClassification.from_pretrained(
         MODEL_NAME,
-        num_labels=4
+        num_labels=4,
+        problem_type="single_label_classification"
     )
 
     # Define training hyperparameters
@@ -85,14 +87,14 @@ def main():
         output_dir="./models/triage_model_checkpoints",
         eval_strategy="epoch",            # Evaluate at the end of each epoch
         save_strategy="epoch",            # Save a checkpoint at the end of each epoch
-        learning_rate=1e-5,
-        warmup_steps=0.1,
+        learning_rate=2e-5,
+        warmup_steps=100,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         num_train_epochs=15,
         weight_decay=0.01,
         load_best_model_at_end=True,      # Automatically reload the best checkpoint based on validation
-        metric_for_best_model="f1"        # Optimize for macro-F1
+        metric_for_best_model="f1",        # Optimize for macro-F1
     )
 
     print("Initializing Hugging Face Trainer...")
@@ -101,7 +103,9 @@ def main():
         args=training_args,
         train_dataset=tokenized_datasets["train"],
         eval_dataset=tokenized_datasets["validation"],
-        compute_metrics=compute_metrics
+        compute_metrics=compute_metrics,
+        processing_class=tokenizer,
+        data_collator=DataCollatorWithPadding(tokenizer=tokenizer)
     )
 
     print("Starting training...")

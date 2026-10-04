@@ -10,7 +10,8 @@ from transformers import (
 )
 import evaluate
 
-MODEL_NAME = "microsoft/deberta-v3-base"
+# MODEL_NAME = "microsoft/deberta-v3-base"
+MODEL_NAME = "distilbert-base-uncased"
 
 # Define the IOB (Inside, Outside, Beginning) schema for the 4 entities
 LABEL_LIST = [
@@ -86,9 +87,9 @@ def main():
     print("Aligning tokens and tags...")
     tokenized_datasets = dataset.map(tokenize_and_align_labels, remove_columns=["text", "entities"])
 
-    # Explicitly remove token_type_ids to prevent NaN crashes in DeBERTa
-    if "token_type_ids" in tokenized_datasets["train"].column_names:
-        tokenized_datasets = tokenized_datasets.remove_columns("token_type_ids")
+    # # Explicitly remove token_type_ids to prevent NaN crashes in DeBERTa
+    # if "token_type_ids" in tokenized_datasets["train"].column_names:
+    #     tokenized_datasets = tokenized_datasets.remove_columns("token_type_ids")
 
     # Convert arrays to PyTorch tensors so the DataCollator pads labels correctly
     tokenized_datasets.set_format("torch")
@@ -132,7 +133,7 @@ def main():
         eval_strategy="epoch",
         save_strategy="epoch",
         learning_rate=2e-5,
-        warmup_steps=0.1,
+        warmup_steps=100,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         num_train_epochs=15,
