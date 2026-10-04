@@ -68,7 +68,7 @@ The final prototype is planned to return:
 
 ## Planned Technology
 
-- Python 3.11
+- Python 3.12
 - PyTorch
 - Hugging Face Transformers
 - scikit-learn
