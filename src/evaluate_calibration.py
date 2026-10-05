@@ -33,7 +33,7 @@ def calculate_ece(confidences, predictions, labels, num_bins=10):
 def main():
     print("Loading validation data...")
     texts, true_labels = [], []
-    with open('../data/split/v2/val_data.jsonl', 'r') as f:
+    with open('../data/processed/v2/val_data.jsonl', 'r') as f:
         for line in f:
             case = json.loads(line)
             texts.append(case['text'])

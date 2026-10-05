@@ -36,9 +36,9 @@ def load_jsonl_to_hf_dataset(filepath):
 def main():
     print("Loading data splits...")
     dataset = DatasetDict({
-        "train": load_jsonl_to_hf_dataset('../data/split/v2/train_data.jsonl'),
-        "validation": load_jsonl_to_hf_dataset('../data/split/v2/val_data.jsonl'),
-        "test": load_jsonl_to_hf_dataset('../data/split/v2/test_data.jsonl')
+        "train": load_jsonl_to_hf_dataset('../data/processed/v2/train_data.jsonl'),
+        "validation": load_jsonl_to_hf_dataset('../data/processed/v2/val_data.jsonl'),
+        "test": load_jsonl_to_hf_dataset('../data/processed/v2/test_data.jsonl')
     })
 
     print(f"Initializing {MODEL_NAME} tokenizer...")

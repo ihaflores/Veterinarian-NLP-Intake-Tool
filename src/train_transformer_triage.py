@@ -44,9 +44,9 @@ def compute_metrics(eval_pred):
 def main():
     print("Loading and preparing data splits...")
     dataset = load_dataset('json', data_files={
-        'train': '../data/split/v2/train_data.jsonl',
-        'validation': '../data/split/v2/val_data.jsonl',
-        'test': '../data/split/v2/test_data.jsonl'
+        'train': '../data/processed/v2/train_data.jsonl',
+        'validation': '../data/processed/v2/val_data.jsonl',
+        'test': '../data/processed/v2/test_data.jsonl'
     })
 
     def encode_labels(example):

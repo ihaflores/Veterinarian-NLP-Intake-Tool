@@ -8,7 +8,7 @@ LABEL_MAP = {"EMERGENCY": 0, "URGENT": 1, "SOON": 2, "ROUTINE": 3}
 def main():
     print("Loading validation data...")
     texts, true_labels = [], []
-    with open('../data/split/v2/val_data.jsonl', 'r') as f:
+    with open('../data/processed/v2/val_data.jsonl', 'r') as f:
         for line in f:
             case = json.loads(line)
             texts.append(case['text'])
